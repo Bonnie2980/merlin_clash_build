@@ -29,41 +29,42 @@ jobs:
       - name: Initialization environment
         env:
           DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get update
+          sudo apt -y install
           
       - name: copy & unextract package
         run: |
-          cp -f clash.tar.gz /home/runneradmin
+          sudo cp -f clash.tar.gz /home/runneradmin
           cd /home/runneradmin
           sudo chmod +x ./clash.tar.gz
-          tar -xvf clash.tar.gz
+          sudo tar -xvf ./clash.tar.gz
       - name: download & unextract clash
         run: |
           cd /home/runneradmin
-          wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-mipsle-softfloat-vv${{ github.event.inputs.clashversion }}.gz
-          gunzip clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }}.gz
+          sudo wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }}.gz
+          sudo gunzip clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }}.gz
           sudo mv -f clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }} clash
           sudo chmod 775 clash
       - name: upx clash
         if: github.event.inputs.upxclash == 'true'
         run: |
           cd /home/runneradmin
-          upx -9 clash
+          sudo upx -9 clash
       - name: update clash
         run: |
           cd /home/runneradmin
-          cp -f clash ./merlinclash/clash/
+          sudo cp -f clash ./merlinclash/clash/
       - name: reextract package
         run: |
           cd /home/runneradmin
-          tar -zcf merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
-          mkdir -p $PACKAGE_PATH/
+          sudo tar -zcf merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
+          sudo mkdir -p $PACKAGE_PATH/
           sudo mv merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz
           cd $PACKAGE_PATH
           echo "PACKAGE=$PWD" >> $GITHUB_ENV
-          echo "::set-output name=status::success"
       - name : upload package
         uses: actions/upload-artifact@main
-        if: steps.organize.outputs.status == 'success'
         with:
           name: merlin-clash-packages
           path: ${{ env.PACKAGE }}
