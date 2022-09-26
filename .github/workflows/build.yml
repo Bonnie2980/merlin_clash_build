@@ -62,6 +62,13 @@ jobs:
         run: |
           cd /home/runneradmin
           sudo cp -f clash ./merlinclash/clash/
+      - name: update koolproxy for mipsel
+        if: github.event.inputs.target == 'mipsle-hardfloat' || github.event.inputs.target == 'mipsle-softfloat'
+        run: |
+          cd /home/runneradmin
+          sudo cp -f kp/koolproxy ./
+          sudo chmod 775 koolproxy
+          sudo cp -f koolproxy ./merlinclash/koolproxy/
       - name: reextract package
         run: |
           cd /home/runneradmin
