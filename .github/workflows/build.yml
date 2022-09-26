@@ -3,9 +3,16 @@ name: Merlin_Clash_Build_CI
 on:
   workflow_dispatch:
     inputs:
+      target:
+        type: choice
+        default: 'mipsle-softfloat'
+        options:
+        - armv7
+        - armv8
+        - mipsle-hardfloat
+        - mipsle-softfloat
       clashversion:
         type: choice
-        description: 'select the version of clash'
         default: '1.11.8'
         options:
         - 1.11.0
@@ -13,7 +20,7 @@ on:
         - 1.11.8
       upxclash:
         type: boolean
-        description: 'whether to upx clash'
+        description: 'upx clash'
         default: 'false'
 env:
   PACKAGE_PATH: /home/package
@@ -42,9 +49,9 @@ jobs:
       - name: download & unextract clash
         run: |
           cd /home/runneradmin
-          sudo wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }}.gz
-          sudo gunzip clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }}.gz
-          sudo mv -f clash-linux-mipsle-softfloat-v${{ github.event.inputs.clashversion }} clash
+          sudo wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
+          sudo gunzip clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
+          sudo mv -f clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }} clash
           sudo chmod 775 clash
       - name: upx clash
         if: github.event.inputs.upxclash == 'true'
@@ -58,9 +65,9 @@ jobs:
       - name: reextract package
         run: |
           cd /home/runneradmin
-          sudo tar -zcf merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
+          sudo tar -zcf merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
           sudo mkdir -p $PACKAGE_PATH/
-          sudo mv merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_misple_v${{ github.event.inputs.clashversion }}.tar.gz
+          sudo mv merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz
           cd $PACKAGE_PATH
           echo "PACKAGE=$PWD" >> $GITHUB_ENV
       - name : upload package
