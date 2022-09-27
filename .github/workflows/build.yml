@@ -65,8 +65,8 @@ jobs:
       - name: update koolproxy for mipsel
         if: github.event.inputs.target == 'mipsle-hardfloat' || github.event.inputs.target == 'mipsle-softfloat'
         run: |
+          sudo cp -f kp/koolproxy /home/runneradmin
           cd /home/runneradmin
-          sudo cp -f kp/koolproxy ./
           sudo chmod 775 koolproxy
           sudo cp -f koolproxy ./merlinclash/koolproxy/
       - name: generate new cers
