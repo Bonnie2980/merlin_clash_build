@@ -69,6 +69,34 @@ jobs:
           sudo cp -f kp/koolproxy ./
           sudo chmod 775 koolproxy
           sudo cp -f koolproxy ./merlinclash/koolproxy/
+      - name: generate new cers
+        run: |
+          sudo mkdir -p /home/runneradmin/ca
+          sudo cp -f unblockneteasemusic/createCertificate.sh /home/runneradmin/ca
+          cd /home/runneradmin/ca
+          sudo chmod +x createCertificate.sh
+          sudo ./createCertificate.sh
+          sudo cp -f ca.crt /home/runneradmin/merlinclash/UnblockMusic/
+          sudo cp -f server.crt /home/runneradmin/merlinclash/UnblockMusic/
+          sudo cp -f server.key /home/runneradmin/merlinclash/UnblockMusic/
+      - name: copy UnblockNeteaseMusic bin
+        run: |
+          if [ "${{ github.event.inputs.target }}" = "mipsle-softfloat" ]
+          then
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-misple-softfloat /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+          fi
+          if [ "${{ github.event.inputs.target }}" = "mipsle-hardfloat" ]
+          then
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-misple-hardfloat /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+          fi
+          if [ "${{ github.event.inputs.target }}" = "armv7" ]
+          then
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-armv7 /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+          fi
+          if [ "${{ github.event.inputs.target }}" = "armv8" ]
+          then
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-arm /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+          fi
       - name: reextract package
         run: |
           cd /home/runneradmin
