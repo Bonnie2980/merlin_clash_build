@@ -42,7 +42,7 @@ jobs:
           
       - name: copy & unextract package
         run: |
-          sudo cp -f clash_3in1.tar.gz /home/runneradmin/clash.tar.gz
+          sudo cp -f clash.tar.gz /home/runneradmin/clash.tar.gz
           cd /home/runneradmin
           sudo chmod +x ./clash.tar.gz
           sudo tar -xvf ./clash.tar.gz
