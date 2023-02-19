@@ -44,12 +44,12 @@ jobs:
       - name: copy & unextract package
         run: |
           sudo cp -f clash.tar.gz /home/runneradmin/clash.tar.gz
-          cd /home/runneradmin
+          sudo cd /home/runneradmin
           sudo chmod +x ./clash.tar.gz
           sudo tar -xvf ./clash.tar.gz
       - name: download & unextract clash
         run: |
-          cd /home/runneradmin
+          sudo cd /home/runneradmin
           sudo wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
           sudo gunzip clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
           sudo mv -f clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }} clash
@@ -57,24 +57,24 @@ jobs:
       - name: upx clash
         if: github.event.inputs.upxclash == 'true'
         run: |
-          cd /home/runneradmin
+          sudo cd /home/runneradmin
           sudo upx -9 clash
       - name: update clash
         run: |
-          cd /home/runneradmin
+          sudo cd /home/runneradmin
           sudo cp -f clash ./merlinclash/clash/
       - name: update koolproxy for mipsel
         if: github.event.inputs.target == 'mipsle-hardfloat' || github.event.inputs.target == 'mipsle-softfloat'
         run: |
           sudo cp -f kp/koolproxy /home/runneradmin
-          cd /home/runneradmin
+          sudo cd /home/runneradmin
           sudo chmod 775 koolproxy
           sudo cp -f koolproxy ./merlinclash/koolproxy/
       - name: generate new cers
         run: |
           sudo mkdir -p /home/runneradmin/ca
           sudo cp -f unblockneteasemusic/createCertificate.sh /home/runneradmin/ca
-          cd /home/runneradmin/ca
+          sudo cd /home/runneradmin/ca
           sudo chmod +x createCertificate.sh
           sudo ./createCertificate.sh
           sudo cp -f ca.crt /home/runneradmin/merlinclash/UnblockMusic/
@@ -100,11 +100,11 @@ jobs:
           fi
       - name: reextract package
         run: |
-          cd /home/runneradmin
+          sudo cd /home/runneradmin
           sudo tar -zcf merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
           sudo mkdir -p $PACKAGE_PATH/
           sudo mv merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz
-          cd $PACKAGE_PATH
+          sudo cd $PACKAGE_PATH
           echo "PACKAGE=$PWD" >> $GITHUB_ENV
       - name : upload package
         uses: actions/upload-artifact@main
