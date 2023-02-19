@@ -44,13 +44,13 @@ jobs:
       - name: copy & unextract package
         run: |
           ls /home
-          sudo cp -f clash.tar.gz /home/runneradmin/clash.tar.gz
-          cd /home/runneradmin
+          sudo cp -f clash.tar.gz /home/runner/clash.tar.gz
+          cd /home/runner
           sudo chmod +x ./clash.tar.gz
           sudo tar -xvf ./clash.tar.gz
       - name: download & unextract clash
         run: |
-          cd /home/runneradmin
+          cd /home/runner
           sudo wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
           sudo gunzip clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
           sudo mv -f clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }} clash
@@ -58,50 +58,50 @@ jobs:
       - name: upx clash
         if: github.event.inputs.upxclash == 'true'
         run: |
-          sudo cd /home/runneradmin
+          cd /home/runner
           sudo upx -9 clash
       - name: update clash
         run: |
-          sudo cd /home/runneradmin
+          cd /home/runner
           sudo cp -f clash ./merlinclash/clash/
       - name: update koolproxy for mipsel
         if: github.event.inputs.target == 'mipsle-hardfloat' || github.event.inputs.target == 'mipsle-softfloat'
         run: |
-          sudo cp -f kp/koolproxy /home/runneradmin
-          sudo cd /home/runneradmin
+          sudo cp -f kp/koolproxy /home/runner
+          cd /home/runner
           sudo chmod 775 koolproxy
           sudo cp -f koolproxy ./merlinclash/koolproxy/
       - name: generate new cers
         run: |
-          sudo mkdir -p /home/runneradmin/ca
-          sudo cp -f unblockneteasemusic/createCertificate.sh /home/runneradmin/ca
-          cd /home/runneradmin/ca
+          sudo mkdir -p /home/runner/ca
+          sudo cp -f unblockneteasemusic/createCertificate.sh /home/runner/ca
+          cd /home/runner/ca
           sudo chmod +x createCertificate.sh
           sudo ./createCertificate.sh
-          sudo cp -f ca.crt /home/runneradmin/merlinclash/UnblockMusic/
-          sudo cp -f server.crt /home/runneradmin/merlinclash/UnblockMusic/
-          sudo cp -f server.key /home/runneradmin/merlinclash/UnblockMusic/
+          sudo cp -f ca.crt /home/runner/merlinclash/UnblockMusic/
+          sudo cp -f server.crt /home/runner/merlinclash/UnblockMusic/
+          sudo cp -f server.key /home/runner/merlinclash/UnblockMusic/
       - name: copy UnblockNeteaseMusic bin
         run: |
           if [ "${{ github.event.inputs.target }}" = "mipsle-softfloat" ]
           then
-            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-misple-softfloat /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-misple-softfloat /home/runner/merlinclash/UnblockMusic/UnblockNeteaseMusic
           fi
           if [ "${{ github.event.inputs.target }}" = "mipsle-hardfloat" ]
           then
-            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-misple-hardfloat /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-misple-hardfloat /home/runner/merlinclash/UnblockMusic/UnblockNeteaseMusic
           fi
           if [ "${{ github.event.inputs.target }}" = "armv7" ]
           then
-            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-armv7 /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-armv7 /home/runner/merlinclash/UnblockMusic/UnblockNeteaseMusic
           fi
           if [ "${{ github.event.inputs.target }}" = "armv8" ]
           then
-            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-arm /home/runneradmin/merlinclash/UnblockMusic/UnblockNeteaseMusic
+            sudo cp -f unblockneteasemusic/UnblockNeteaseMusic-arm /home/runner/merlinclash/UnblockMusic/UnblockNeteaseMusic
           fi
       - name: reextract package
         run: |
-          cd /home/runneradmin
+          cd /home/runner
           sudo tar -zcf merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
           sudo mkdir -p $PACKAGE_PATH/
           sudo mv merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz
