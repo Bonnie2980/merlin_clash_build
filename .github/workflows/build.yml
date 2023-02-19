@@ -44,12 +44,12 @@ jobs:
       - name: copy & unextract package
         run: |
           sudo cp -f clash.tar.gz /home/runneradmin/clash.tar.gz
-          sudo cd /home/runneradmin
+          cd /home/runneradmin
           sudo chmod +x ./clash.tar.gz
           sudo tar -xvf ./clash.tar.gz
       - name: download & unextract clash
         run: |
-          sudo cd /home/runneradmin
+          cd /home/runneradmin
           sudo wget https://github.com/Dreamacro/clash/releases/download/v${{ github.event.inputs.clashversion }}/clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
           sudo gunzip clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }}.gz
           sudo mv -f clash-linux-${{ github.event.inputs.target }}-v${{ github.event.inputs.clashversion }} clash
@@ -74,7 +74,7 @@ jobs:
         run: |
           sudo mkdir -p /home/runneradmin/ca
           sudo cp -f unblockneteasemusic/createCertificate.sh /home/runneradmin/ca
-          sudo cd /home/runneradmin/ca
+          cd /home/runneradmin/ca
           sudo chmod +x createCertificate.sh
           sudo ./createCertificate.sh
           sudo cp -f ca.crt /home/runneradmin/merlinclash/UnblockMusic/
@@ -100,7 +100,7 @@ jobs:
           fi
       - name: reextract package
         run: |
-          sudo cd /home/runneradmin
+          cd /home/runneradmin
           sudo tar -zcf merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
           sudo mkdir -p $PACKAGE_PATH/
           sudo mv merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz
