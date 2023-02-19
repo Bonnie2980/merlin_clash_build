@@ -105,7 +105,7 @@ jobs:
           sudo tar -zcf merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz ./merlinclash
           sudo mkdir -p $PACKAGE_PATH/
           sudo mv merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz $PACKAGE_PATH/merlin_clash_${{ github.event.inputs.target }}_v${{ github.event.inputs.clashversion }}.tar.gz
-          sudo cd $PACKAGE_PATH
+          cd $PACKAGE_PATH
           echo "PACKAGE=$PWD" >> $GITHUB_ENV
       - name : upload package
         uses: actions/upload-artifact@main
